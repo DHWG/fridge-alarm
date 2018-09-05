@@ -106,6 +106,7 @@ class SensorMonitor:
                     self._logger.info(f'Alert resolved for {sensor} because state {new_state}')
                     if alert_resolved_callback is not None:
                         alert_resolved_callback(sensor, new_state)
+                    self._triggered[sensor] = False
         self.add_callback(sensor, _state_change_callback)
 
 
