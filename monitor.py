@@ -143,28 +143,28 @@ if __name__ == '__main__':
 
     def on_mqtt_message(client, userdata, msg):
         data = json.loads(msg.payload)
-        for device in config.MONITORED_SENSORS:
-            monitor.update(device, data[device])
+        for sensor in config.MONITORED_SENSORS:
+            monitor.update(sensor, data[sensor])
 
     mqtt_client = mqtt.Client()
     mqtt_client.on_connect = on_mqtt_connect
     mqtt_client.on_message = on_mqtt_message
 
     def trigger_alert(sensor, state):
-        chat_msg = '{} has been open for more than {} seconds.'.format(NAME_MAPPING.get(device),
+        chat_msg = '{} has been open for more than {} seconds.'.format(NAME_MAPPING.get(sensor),
                                                                        config.ALERT_TIMEOUT)
         send_to_telegram(chat_msg, mqtt_client)
-        fish_msg = 'Close the {} you dunce.'.format(NAME_MAPPING.get(device))
+        fish_msg = 'Close the {} you dunce.'.format(NAME_MAPPING.get(sensor))
         send_to_billy(fish_msg, mqtt_client)
     
     def resolve_alert(sensor, state):
-        chat_msg = '{} has been closed again.'.format(NAME_MAPPING.get(device))
+        chat_msg = '{} has been closed again.'.format(NAME_MAPPING.get(sensor))
         send_to_telegram(chat_msg, mqtt_client)
-        fish_msg = 'Thank you for closing {}.'.format(NAME_MAPPING.get(device))
+        fish_msg = 'Thank you for closing {}.'.format(NAME_MAPPING.get(sensor))
         send_to_billy(fish_msg, mqtt_client)
     
-    for device in config.MONITORED_SENSORS:
-        monitor.set_alert(device,
+    for sensor in config.MONITORED_SENSORS:
+        monitor.set_alert(sensor,
                           alert_state=1,
                           timeout=config.ALERT_TIMEOUT,
                           alert_triggered_callback=trigger_alert,
