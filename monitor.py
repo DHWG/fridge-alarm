@@ -163,7 +163,9 @@ if __name__ == '__main__':
         send_to_billy(fish_msg, mqtt_client)
     
     for device in config.MONITORED_SENSORS:
-        monitor.set_alert(device, 1, 10,
+        monitor.set_alert(device,
+                          alert_state=1,
+                          timeout=config.ALERT_TIMEOUT,
                           alert_triggered_callback=trigger_alert,
                           alert_resolved_callback=resolve_alert)
 
